@@ -157,14 +157,14 @@ class PowerGrid:
         for company1, company2 in self.connections:
             lat1, lon1 = self.power_companies[company1]
             lat2, lon2 = self.power_companies[company2]
-            ax.plot([lon1, lon2], [lat1, lat2], 'b-', linewidth=2, alpha=0.7, zorder=1)
+            ax.plot([lon1, lon2], [lat1, lat2], color='#404040', linewidth=2, alpha=0.9, zorder=1)
         
         # 電力会社の位置に丸を描画（発電能力に応じてサイズを変更）
         for company, (lat, lon) in self.power_companies.items():
             circle_size = self.get_circle_size(company)
             capacity = self.power_capacity.get(company, 0)
             
-            ax.scatter(lon, lat, s=circle_size, c='red', marker='o', alpha=1.0, 
+            ax.scatter(lon, lat, s=circle_size, c='white', marker='o', alpha=1.0, 
                       edgecolors='black', linewidth=2, zorder=2)
             ax.annotate(f'{company}\n({capacity:.1f}GW)', (lon, lat), xytext=(5, 5), 
                        textcoords='offset points', fontsize=9, fontweight='bold', ha='left', zorder=3)
