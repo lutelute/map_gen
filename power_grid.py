@@ -131,7 +131,7 @@ class PowerGrid:
         
         self.company_names = companies
     
-    def plot_power_grid_map(self, geojson_data):
+    def plot_power_grid_map(self, geojson_data, show_gw=True, save_figure=False, save_path=None, save_format='png'):
         """日本地図に電力グリッドを描画"""
         fig, ax = plt.subplots(1, 1, figsize=(14, 10))
         
@@ -166,7 +166,14 @@ class PowerGrid:
             
             ax.scatter(lon, lat, s=circle_size, c='white', marker='o', alpha=1.0, 
                       edgecolors='black', linewidth=2, zorder=2)
-            ax.annotate(f'{company}\n({capacity:.1f}GW)', (lon, lat), xytext=(5, 5), 
+            
+            # GW表示の選択
+            if show_gw:
+                label_text = f'{company}\n({capacity:.1f}GW)'
+            else:
+                label_text = company
+            
+            ax.annotate(label_text, (lon, lat), xytext=(5, 5), 
                        textcoords='offset points', fontsize=9, fontweight='bold', ha='left', zorder=3)
         
         ax.set_xlim(129, 146)
@@ -178,6 +185,15 @@ class PowerGrid:
         ax.grid(True, alpha=0.3)
         
         plt.tight_layout()
+        
+        # 図の保存
+        if save_figure and save_path:
+            try:
+                fig.savefig(save_path, format=save_format, dpi=300, bbox_inches='tight')
+                print(f"図を保存しました: {save_path}")
+            except Exception as e:
+                print(f"図の保存に失敗しました: {e}")
+        
         plt.show()
     
     def print_network_info(self):
@@ -212,6 +228,95 @@ class PowerGrid:
                 print(f"{self.impedance_matrix[i][j]:8.3f}", end="")
             print()
 
+def get_user_preferences():
+    """ユーザーの設定を取得"""
+    print("\n=== 表示設定 ===")
+    
+    # GW表示の確認
+    while True:
+        gw_choice = input("グラフにGW（発電能力）を表示しますか？ (y/n): ").lower().strip()
+        if gw_choice in ['y', 'yes', 'はい', '']:
+            show_gw = True
+            break
+        elif gw_choice in ['n', 'no', 'いいえ']:
+            show_gw = False
+            break
+        else:
+            print("y または n を入力してください。")
+    
+    # 図の保存確認
+    while True:
+        save_choice = input("図を保存しますか？ (y/n): ").lower().strip()
+        if save_choice in ['y', 'yes', 'はい']:
+            save_figure = True
+            break
+        elif save_choice in ['n', 'no', 'いいえ', '']:
+            save_figure = False
+            save_path = None
+            save_format = 'png'
+            break
+        else:
+            print("y または n を入力してください。")
+    
+    if save_figure:
+        # 保存フォルダの指定
+        print("\n保存フォルダを指定してください：")
+        print("1) カレントディレクトリ (デフォルト)")
+        print("2) デスクトップ")
+        print("3) カスタムパス")
+        
+        while True:
+            folder_choice = input("選択してください (1/2/3): ").strip()
+            if folder_choice == '1' or folder_choice == '':
+                save_folder = "."
+                break
+            elif folder_choice == '2':
+                import os
+                save_folder = os.path.expanduser("~/Desktop")
+                break
+            elif folder_choice == '3':
+                save_folder = input("保存フォルダのパスを入力してください: ").strip()
+                if not save_folder:
+                    save_folder = "."
+                break
+            else:
+                print("1, 2, または 3 を入力してください。")
+        
+        # 保存形式の選択
+        print("\n保存形式を選択してください：")
+        print("1) PNG (デフォルト)")
+        print("2) PDF")
+        print("3) SVG")
+        print("4) JPEG")
+        
+        while True:
+            format_choice = input("選択してください (1/2/3/4): ").strip()
+            if format_choice == '1' or format_choice == '':
+                save_format = 'png'
+                break
+            elif format_choice == '2':
+                save_format = 'pdf'
+                break
+            elif format_choice == '3':
+                save_format = 'svg'
+                break
+            elif format_choice == '4':
+                save_format = 'jpeg'
+                break
+            else:
+                print("1, 2, 3, または 4 を入力してください。")
+        
+        # ファイル名の生成
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"power_grid_map_{timestamp}.{save_format}"
+        save_path = f"{save_folder}/{filename}"
+    else:
+        save_path = None
+        save_format = 'png'
+    
+    return show_gw, save_figure, save_path, save_format
+
 if __name__ == "__main__":
     print("日本電力グリッド地図を生成中...")
     
@@ -222,6 +327,9 @@ if __name__ == "__main__":
         # 電力グリッドのインスタンスを作成
         power_grid = PowerGrid()
         
+        # ユーザー設定を取得
+        show_gw, save_figure, save_path, save_format = get_user_preferences()
+        
         # ネットワーク情報を表示
         power_grid.print_network_info()
         
@@ -230,6 +338,6 @@ if __name__ == "__main__":
         
         # 地図を描画
         print("\n地図を描画中...")
-        power_grid.plot_power_grid_map(japan_geojson)
+        power_grid.plot_power_grid_map(japan_geojson, show_gw, save_figure, save_path, save_format)
     else:
         print("地図データの取得に失敗しました。")
