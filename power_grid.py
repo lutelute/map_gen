@@ -101,8 +101,8 @@ class PowerGrid:
     def get_circle_size(self, company):
         """発電能力に応じて丸のサイズを計算"""
         capacity = self.power_capacity.get(company, 10)
-        # ベースサイズを200として、発電能力に比例してサイズを決定
-        base_size = 200
+        # ベースサイズを400として、発電能力に比例してサイズを決定
+        base_size = 400
         size_factor = capacity / 10  # 10GWを基準とする
         return base_size * size_factor
     
@@ -164,7 +164,7 @@ class PowerGrid:
             circle_size = self.get_circle_size(company)
             capacity = self.power_capacity.get(company, 0)
             
-            ax.scatter(lon, lat, s=circle_size, c='red', marker='o', alpha=0.8, 
+            ax.scatter(lon, lat, s=circle_size, c='red', marker='o', alpha=0.6, 
                       edgecolors='black', linewidth=2, zorder=2)
             ax.annotate(f'{company}\n({capacity:.1f}GW)', (lon, lat), xytext=(5, 5), 
                        textcoords='offset points', fontsize=9, fontweight='bold', ha='left', zorder=3)
