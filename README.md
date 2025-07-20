@@ -14,13 +14,15 @@
 
 ```
 map_gen/
-├── map.py              # 基本的な日本地図表示
-├── power_grid.py       # 電力グリッド地図メイン
-├── power_capacity.csv  # 発電能力設定
-├── connections.csv     # 接続関係設定
-├── requirements.txt    # 依存ライブラリ
-├── setup_venv.sh      # 仮想環境セットアップスクリプト
-└── README.md          # このファイル
+├── map.py                  # 基本的な日本地図表示
+├── power_grid.py           # 電力グリッド地図（シンプル版）
+├── power_grid_enhanced.py  # 電力グリッド地図（高機能版）
+├── power_capacity.csv      # 発電能力設定
+├── connections.csv         # 接続関係設定
+├── config_sample.json      # 設定ファイルサンプル
+├── requirements.txt        # 依存ライブラリ
+├── setup_venv.sh          # 仮想環境セットアップスクリプト
+└── README.md              # このファイル
 ```
 
 ## セットアップ
@@ -61,8 +63,17 @@ source venv/bin/activate
 # 基本的な日本地図を表示
 python map.py
 
-# 電力グリッド地図を表示
+# 電力グリッド地図を表示（シンプル版）
 python power_grid.py
+
+# 電力グリッド地図を表示（高機能版）
+python power_grid_enhanced.py
+
+# 高機能版のオプション例
+python power_grid_enhanced.py --save --export          # 画像保存と結果出力
+python power_grid_enhanced.py --config config_sample.json  # カスタム設定
+python power_grid_enhanced.py --info-only              # 情報表示のみ
+python power_grid_enhanced.py --no-show --save         # 非表示で保存のみ
 ```
 
 ### 設定ファイルの編集

@@ -1,0 +1,44 @@
+{
+  "display": {
+    "figure_size": [16, 12],
+    "title": "日本電力グリッド接続図 - カスタム設定",
+    "show_grid": true,
+    "grid_alpha": 0.3,
+    "font_size_title": 18,
+    "font_size_label": 14,
+    "font_size_annotation": 10
+  },
+  "map": {
+    "face_color": "lightsteelblue",
+    "edge_color": "navy",
+    "line_width": 0.5,
+    "alpha": 0.6,
+    "show_boundaries": true
+  },
+  "circles": {
+    "base_size": 1000,
+    "size_factor": 10,
+    "color": "darkred",
+    "alpha": 0.8,
+    "edge_color": "black",
+    "edge_width": 3,
+    "show_capacity": true
+  },
+  "connections": {
+    "color": "darkblue",
+    "width": 3,
+    "alpha": 0.8,
+    "style": "-"
+  },
+  "bounds": {
+    "lon_min": 128,
+    "lon_max": 147,
+    "lat_min": 29,
+    "lat_max": 47
+  },
+  "data": {
+    "capacity_csv": "power_capacity.csv",
+    "connections_csv": "connections.csv",
+    "map_data_url": "https://raw.githubusercontent.com/dataofjapan/land/master/japan.geojson"
+  }
+}
