@@ -150,7 +150,7 @@ class PowerGrid:
                     polygon = Polygon(coords, closed=True)
                     patches.append(polygon)
         
-        p = PatchCollection(patches, facecolor='lightgray', edgecolor='black', linewidth=0.3, alpha=0.7)
+        p = PatchCollection(patches, facecolor='lightgray', edgecolor='none', linewidth=0, alpha=0.7)
         ax.add_collection(p)
         
         # 接続線の描画（丸の下に来るように先に描画）
