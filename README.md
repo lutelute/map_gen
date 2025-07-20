@@ -16,6 +16,8 @@
 map_gen/
 ├── map.py                  # 基本的な日本地図表示
 ├── power_grid.py           # 電力グリッド地図
+├── run_map.command         # ダブルクリック実行（選択式）
+├── run_power_grid.command  # ダブルクリック実行（電力グリッド直接）
 ├── power_capacity.csv      # 発電能力設定
 ├── connections.csv         # 接続関係設定
 ├── config_sample.json      # 設定ファイルサンプル
@@ -53,7 +55,16 @@ pip install -r requirements.txt
 
 ## 使い方
 
-### 基本的な実行
+### 🖱️ ダブルクリックで簡単実行（推奨）
+
+以下のファイルをダブルクリックするだけで実行できます：
+
+- **`run_power_grid.command`** - 電力グリッド地図を直接表示
+- **`run_map.command`** - プログラム選択メニューを表示
+
+初回実行時は自動的に環境セットアップも行われます。
+
+### 💻 コマンドライン実行
 
 ```bash
 # 仮想環境をアクティベート
