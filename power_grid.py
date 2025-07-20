@@ -101,8 +101,8 @@ class PowerGrid:
     def get_circle_size(self, company):
         """発電能力に応じて丸のサイズを計算"""
         capacity = self.power_capacity.get(company, 10)
-        # ベースサイズを100として、発電能力に比例してサイズを決定
-        base_size = 100
+        # ベースサイズを200として、発電能力に比例してサイズを決定
+        base_size = 200
         size_factor = capacity / 10  # 10GWを基準とする
         return base_size * size_factor
     
@@ -153,21 +153,21 @@ class PowerGrid:
         p = PatchCollection(patches, facecolor='lightgray', edgecolor='black', linewidth=0.3, alpha=0.7)
         ax.add_collection(p)
         
+        # 接続線の描画（丸の下に来るように先に描画）
+        for company1, company2 in self.connections:
+            lat1, lon1 = self.power_companies[company1]
+            lat2, lon2 = self.power_companies[company2]
+            ax.plot([lon1, lon2], [lat1, lat2], 'b-', linewidth=2, alpha=0.7, zorder=1)
+        
         # 電力会社の位置に丸を描画（発電能力に応じてサイズを変更）
         for company, (lat, lon) in self.power_companies.items():
             circle_size = self.get_circle_size(company)
             capacity = self.power_capacity.get(company, 0)
             
             ax.scatter(lon, lat, s=circle_size, c='red', marker='o', alpha=0.8, 
-                      edgecolors='black', linewidth=2)
+                      edgecolors='black', linewidth=2, zorder=2)
             ax.annotate(f'{company}\n({capacity:.1f}GW)', (lon, lat), xytext=(5, 5), 
-                       textcoords='offset points', fontsize=9, fontweight='bold', ha='left')
-        
-        # 接続線の描画
-        for company1, company2 in self.connections:
-            lat1, lon1 = self.power_companies[company1]
-            lat2, lon2 = self.power_companies[company2]
-            ax.plot([lon1, lon2], [lat1, lat2], 'b-', linewidth=2, alpha=0.7)
+                       textcoords='offset points', fontsize=9, fontweight='bold', ha='left', zorder=3)
         
         ax.set_xlim(129, 146)
         ax.set_ylim(30, 46)
